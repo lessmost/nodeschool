@@ -1,7 +1,4 @@
 #include <nan.h>
-#ifndef _WIN32
-#include <unistd.h>
-#endif
 
 using namespace v8;
 
@@ -23,11 +20,6 @@ class MyWorker : public NanAsyncWorker {
   // should go on `this`.
   void Execute () {
     // Asynchronous, non-V8 work goes here
-    #ifdef _WIN32
-    Sleep(delay);
-    #else
-    usleep(delay * 1000);
-    #endif
   }
 
   // Executed when the async work is complete
@@ -48,17 +40,9 @@ NAN_METHOD(Delay) {
   NanScope();
 
   // get delay and callback
-  int delay = args[0].As<Number>()->IntegerValue();
-  Local<Function> func = args[1].As<Function>();
-
   // create NanCallback instance wrapping the callback
-  NanCallback *callback = new NanCallback(func);
-  
   // create a MyWorker instance, passing the callback and delay
-  MyWorker *worker = new MyWorker(callback, delay);
-  
   // queue the worker instance onto the thread-pool
-  NanAsyncQueueWorker(worker);
 
   NanReturnUndefined();
 }
