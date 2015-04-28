@@ -9,8 +9,16 @@ NAN_METHOD(Print) {
     NanReturnUndefined();
 }
 
+NAN_METHOD(Length) {
+    NanScope();
+    Local<String> str = args[0].As<String>();
+    Local<Number> len = NanNew<Number>(strlen(*String::Utf8Value(str)));
+    NanReturnValue(len);
+}
+
 void Init(Handle<Object> exports) {
   exports->Set(NanNew("print"), NanNew<FunctionTemplate>(Print)->GetFunction());
+  exports->Set(NanNew("length"), NanNew<FunctionTemplate>(Length)->GetFunction());
 }
 
 NODE_MODULE(myaddon, Init);
