@@ -4,7 +4,8 @@
 using namespace v8;
 
 NAN_METHOD(Print) {
-    std::cout << "I am a native addon and I AM ALIVE!" << std::endl;
+    Local<String> str = args[0].As<String>();
+    std::cout << *String::Utf8Value(str) << std::endl;
     NanReturnUndefined();
 }
 
