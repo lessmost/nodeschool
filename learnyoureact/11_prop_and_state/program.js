@@ -29,7 +29,7 @@ var TodoBox = require("./views/index.jsx");
 
 app.use('/bundle.js', function (req, res) {
     res.setHeader('content-type', 'application/javascript');
-    browserify('./app.js')
+    browserify('./app.js', {debug: true})
         .transform('reactify')
         .bundle()
         .pipe(res);
